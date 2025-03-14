@@ -17,12 +17,18 @@
     </div>
 </template>
 
+// filepath: c:\Storage\Codev\Github\Nuxt Framework\i-manage\pages\signup\index.vue
 <script lang="ts" setup>
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, addDoc } from 'firebase/firestore'
+import { getFirestore, collection, addDoc, setDoc, doc } from 'firebase/firestore'
 import { ref } from 'vue'
 
-const firebaseConfig = useRuntimeConfig().public
+// Get the firebase config from runtime config under the 'firebase' key
+const firebaseConfig = useRuntimeConfig().public;
+
+if (!firebaseConfig || !firebaseConfig.apiKey) {
+  throw new Error('Firebase configuration is missing or incomplete');
+}
 
 const firebaseApp = initializeApp(firebaseConfig)
 const db = getFirestore(firebaseApp)
@@ -40,12 +46,15 @@ const handleSignUp = async () => {
     return
   }
 
+  // Note: This will be the name of the collection in Firestore
+  const collecTionName = 'accounts'
+  const genAlhaNumericId = Math.random().toString(36).substring(2)
   try {
-    const usersCollection = collection(db, 'trial-users')
-    await addDoc(usersCollection, {
+    await setDoc(doc(db, collecTionName, genAlhaNumericId), {
       username: form.value.username,
       email: form.value.email,
-      password: form.value.password // Note: Storing plain text passwords is insecure. Use proper hashing in a backend service.
+      password: form.value.password,
+      uid: genAlhaNumericId
     })
     alert('Account created successfully!')
   } catch (error) {
