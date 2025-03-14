@@ -9,6 +9,8 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxt/icon",
     "@nuxt/fonts",
+    "@vee-validate/nuxt",
+    "@morev/vue-transitions/nuxt"
   ],
 
   tailwindcss: {
