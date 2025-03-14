@@ -11,6 +11,7 @@
     "ui": "npx ui-thing@latest add"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.6.0",
     "@morev/vue-transitions": "^3.0.5",
     "@nuxt/fonts": "^0.11.0",
     "@nuxt/icon": "^1.11.0",
