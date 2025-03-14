@@ -10,12 +10,22 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxt/fonts",
     "@vee-validate/nuxt",
-    "@morev/vue-transitions/nuxt"
+    "@morev/vue-transitions/nuxt",
   ],
 
   tailwindcss: {
     exposeConfig: true,
     editorSupport: true,
+  },
+  runtimeConfig: {
+    public: {
+      apiKey: process.env.apiKey,
+      authDomain: process.env.authDomain,
+      projectId: process.env.projectId,
+      storageBucket: process.env.storageBucket,
+      messagingSenderId: process.env.messagingSenderId,
+      appId: process.env.appId,
+    },
   },
 
   colorMode: {
