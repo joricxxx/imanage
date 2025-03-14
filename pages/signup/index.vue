@@ -17,11 +17,12 @@
     </div>
 </template>
 
-// filepath: c:\Storage\Codev\Github\Nuxt Framework\i-manage\pages\signup\index.vue
 <script lang="ts" setup>
 import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, addDoc, setDoc, doc } from 'firebase/firestore'
 import { ref } from 'vue'
+import Description from '~/components/Ui/Toast/Description.vue';
+import { useToast } from '~/composables/useToast';
 
 // Get the firebase config from runtime config under the 'firebase' key
 const firebaseConfig = useRuntimeConfig().public;
@@ -32,6 +33,7 @@ if (!firebaseConfig || !firebaseConfig.apiKey) {
 
 const firebaseApp = initializeApp(firebaseConfig)
 const db = getFirestore(firebaseApp)
+const router = useRouter()
 
 const form = ref({
   username: '',
@@ -56,10 +58,20 @@ const handleSignUp = async () => {
       password: form.value.password,
       uid: genAlhaNumericId
     })
-    alert('Account created successfully!')
+    useToast().toast({
+      description: 'Account created successfully!',
+      variant: 'success',
+      icon: 'lucide:badge-check'
+    })
+    await new Promise(resolve => setTimeout(resolve, 2000)) // This will wait for 2 seconds
+    router.push('/')
   } catch (error) {
-    console.error('Error creating account:', error)
-    alert('Failed to create account. Please try again.')
+    useToast().toast({
+      title: 'Error',
+      description: 'Failed to create account. Please try again.',
+      variant: 'destructive',
+      icon: 'lucide:badge-x'
+    })
   }
 }
 </script>
