@@ -32,20 +32,44 @@ const form = ref({
 })
 const handleLogin = async () => {
   if(form.value.username === '' || form.value.password === '') {
-    alert('Please fill in all fields!')
+    useToast().toast({
+      title: 'Error',
+      description: 'Please fill in all fields',
+      variant: 'destructive'
+    })
     return
   }
   const collecTionName = 'accounts'
   const querySnapshot = await getDocs(collection(db, collecTionName))
-  querySnapshot.forEach((doc) => {
-    if(doc.data().username === form.value.username && doc.data().password === form.value.password) {
-      alert('Login successful!')
-      router.push('/')
+  for (const doc of querySnapshot.docs) {
+    if (doc.data().username === form.value.username) { // If username exists
+      if (doc.data().password === form.value.password) {
+        useToast().toast({
+          title: 'Success',
+          description: 'Logged in successfully',
+          variant: 'success',
+          icon: 'lucide:check-circle'
+        });
+        await new Promise(resolve => setTimeout(resolve, 2000)); // This will wait for 2 seconds
+        router.push('/');
+        return; // Exit loop after successful login
+      } else {
+        useToast().toast({
+          title: 'Error',
+          description: 'Incorrect password',
+          variant: 'destructive',
+          icon: 'lucide:badge-x'
+        });
+        return; // Exit loop after incorrect password
+      }
     }
-    else {
-      alert('Invalid username or password!')
-    }
-  })
+  }
+  useToast().toast({
+    title: 'Error',
+    description: 'Invalid username',
+    variant: 'destructive',
+    icon: 'lucide:badge-x'
+  });
 }
 
 </script>
