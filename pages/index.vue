@@ -59,7 +59,8 @@ const db = getFirestore(firebaseApp);
 
 const isAddingEmployee = ref(false);
 const currenUserID = ref("");
-const collectionName = `collections/${currenUserID.value}/employees`;
+const userID = currenUserID.value || "defaultUser";
+const collectionName = `collections/${userID}/employees`;
 const employees = ref<Employee[]>([]);
 const isEmptyCollection = ref();
 
