@@ -3,7 +3,7 @@
     <Header />
     <div class="grid grid-cols-1 gap-5 md:flex md:items-center md:justify-between">
       <div class="flex flex-col">
-        <h1 class="font-semibold">Users</h1>
+        <h1 class="font-semibold">Your Employee</h1>
         <p class="text-sm text-muted-foreground">
           A list of all the employee in your account including their name, title, email and role.
         </p>
@@ -50,6 +50,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { ref, onMounted, watch } from "vue";
+import type { Account } from "~/types/account";
 import type { Employee } from "~/types/employee";
 
 // Define the Employee type
@@ -58,9 +59,11 @@ const firebaseConfig = useRuntimeConfig().public;
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
+const account = useState<Account>('account')
+const currentUser = computed(() => account.value || null)
+const userID = currentUser.value?.uid || "default"
+
 const isAddingEmployee = ref(false);
-const currenUserID = ref("");
-const userID = currenUserID.value || "defaultUser";
 const collectionName = `collections/${userID}/employees`;
 const employees = ref<Employee[]>([]);
 const isEmptyCollection = ref();

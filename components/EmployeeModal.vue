@@ -21,6 +21,7 @@
 <script lang="ts" setup>
 import { initializeApp } from "firebase/app";
 import { doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import type { Account } from "~/types/account";
 import type { Employee } from "~/types/employee";
 
 const props = defineProps<{employee?: Employee}>()
@@ -37,7 +38,10 @@ const firebaseConfig = useRuntimeConfig().public;
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-const currenUserID = ref("")
+const account = useState<Account>('account')
+const currentUser = computed(() => account.value || null)
+
+const currenUserID = computed(() => currentUser.value?.uid)
 const userID = currenUserID.value || "defaultUser"
 const filepath = `collections/${userID}/employees`;
 
