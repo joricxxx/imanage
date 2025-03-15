@@ -50,6 +50,7 @@ const handleLogin = async () => {
           variant: 'success',
           icon: 'lucide:check-circle'
         });
+        useState('account').value = doc.data();
         await new Promise(resolve => setTimeout(resolve, 2000)); // This will wait for 2 seconds
         router.push('/');
         return; // Exit loop after successful login

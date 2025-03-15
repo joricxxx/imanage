@@ -21,9 +21,7 @@
 import { initializeApp } from 'firebase/app'
 import { getFirestore, collection, addDoc, setDoc, doc } from 'firebase/firestore'
 import { ref } from 'vue'
-import Description from '~/components/Ui/Toast/Description.vue';
 import { useToast } from '~/composables/useToast';
-import type { User } from '~/types/user';
 
 // Firebase Setup
 const firebaseConfig = useRuntimeConfig().public;
