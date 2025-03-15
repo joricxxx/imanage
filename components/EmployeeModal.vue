@@ -20,7 +20,7 @@
   
 <script lang="ts" setup>
 import { initializeApp } from "firebase/app";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 import type { Employee } from "~/types/employee";
 
 const props = defineProps<{employee?: Employee}>()
@@ -41,22 +41,50 @@ const currenUserID = ref("")
 const userID = currenUserID.value || "defaultUser"
 const filepath = `collections/${userID}/employees`;
 
+const emit = defineEmits<{
+    (e: 'employeeUpdated'): void
+}>()
+
 const form = ref({
     name: '',
     title: '',
     email: '',
     sex: ''
 })
-
+watch(
+    () => props.employee,
+    (newEmployee) => {
+        if(newEmployee) {
+            form.value = {
+              name: newEmployee.name,
+              title: newEmployee.title,
+              email: newEmployee.email,
+              sex: newEmployee.sex
+            }
+        }
+    },
+    {immediate: true}
+)
 const handleSubmit = async () => {
     try {
-        const genAlhaNumericId = Math.random().toString(36).substring(2) 
-        await setDoc(doc(db, filepath, genAlhaNumericId), form.value)
-        useToast().toast({
-            description: 'Employee added successfully!',
-            variant: 'success',
-            icon: 'lucide:badge-check'
-        })
+        if(isEditing.value) {
+            const employeeRef = doc(db, filepath, props.employee?.id!)
+            await updateDoc(employeeRef, form.value)
+            useToast().toast({
+                description: 'Update successfully!',
+                variant: 'success',
+                icon: 'lucide:badge-check'
+            })
+        } else {
+            const genAlhaNumericId = Math.random().toString(36).substring(2) 
+            await setDoc(doc(db, filepath, genAlhaNumericId), form.value)
+            useToast().toast({
+                description: 'Employee added successfully!',
+                variant: 'success',
+                icon: 'lucide:badge-check'
+            })
+        }
+        emit('employeeUpdated')
         open.value = false
     }
     catch (error) {
@@ -67,6 +95,7 @@ const handleSubmit = async () => {
         })
     }
 }
+
 </script>
 
 <style>

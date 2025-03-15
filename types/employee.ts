@@ -3,5 +3,5 @@ export interface Employee {
   name: string;
   title: string;
   email: string;
-  role: "Admin" | "Member" | "Viewer";
+  sex: string;
 }

@@ -21,7 +21,7 @@
             <UiTableHead class="pl-0 font-semibold text-foreground">Name</UiTableHead>
             <UiTableHead class="pl-0 font-semibold text-foreground">Title</UiTableHead>
             <UiTableHead class="pl-0 font-semibold text-foreground">Email</UiTableHead>
-            <UiTableHead class="pl-0 font-semibold text-foreground">Role</UiTableHead>
+            <UiTableHead class="pl-0 font-semibold text-foreground">Sex</UiTableHead>
             <UiTableHead class="pl-0">
               <span class="sr-only">Actions</span>
             </UiTableHead>
@@ -33,9 +33,9 @@
               <UiTableCell class="pl-0 font-medium">{{ e.name }} </UiTableCell>
               <UiTableCell class="pl-0 text-muted-foreground">{{ e.title }}</UiTableCell>
               <UiTableCell class="pl-0 text-muted-foreground">{{ e.email }}</UiTableCell>
-              <UiTableCell class="pl-0 text-muted-foreground">{{ e.role }}</UiTableCell>
+              <UiTableCell class="pl-0 text-muted-foreground">{{ e.sex }}</UiTableCell>
               <UiTableCell class="pl-0 text-right">
-                <UiButton size="sm" variant="linkHover2">Edit</UiButton>
+                <UiButton @click="setEdit(e)" size="sm" variant="linkHover2">Edit</UiButton>
               </UiTableCell>
             </UiTableRow>
           </template>
@@ -48,7 +48,7 @@
 <script lang="ts" setup>
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import type { Employee } from "~/types/employee";
 
 // Define the Employee type
@@ -79,9 +79,18 @@ const fetchEmployees = async () => {
     console.error("Error fetching employees:", error);
   }
 };
-
+const setEdit = (employee: Employee) => {
+  editItem.value = employee;
+  isAddingEmployee.value = true;
+};
 onMounted(() => {
   fetchEmployees();
 });
 
+// Watch for changes in isAddingEmployee and refresh the table when the modal is closed
+watch(isAddingEmployee, (newValue) => {
+  if (!newValue) {
+    fetchEmployees();
+  }
+});
 </script>
