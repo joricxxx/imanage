@@ -34,8 +34,9 @@
               <UiTableCell class="pl-0 text-muted-foreground">{{ e.title }}</UiTableCell>
               <UiTableCell class="pl-0 text-muted-foreground">{{ e.email }}</UiTableCell>
               <UiTableCell class="pl-0 text-muted-foreground">{{ e.sex }}</UiTableCell>
-              <UiTableCell class="pl-0 text-right">
-                <UiButton @click="setEdit(e)" size="sm" variant="linkHover2">Edit</UiButton>
+              <UiTableCell class="pl-0 text-right space-x-2">
+                <UiButton @click="setEdit(e)" size="sm" variant="secondary">Edit</UiButton>
+                <UiButton @click="remove(e)" size="sm" variant="destructive">Delete</UiButton>
               </UiTableCell>
             </UiTableRow>
           </template>
@@ -47,7 +48,7 @@
 
 <script lang="ts" setup>
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { ref, onMounted, watch } from "vue";
 import type { Employee } from "~/types/employee";
 
@@ -82,6 +83,14 @@ const fetchEmployees = async () => {
 const setEdit = (employee: Employee) => {
   editItem.value = employee;
   isAddingEmployee.value = true;
+};
+const remove = async (employee: Employee) => {
+  const res = confirm("Are you sure you want to delete this employee?");
+  if (res) {
+    await deleteDoc(doc(db, collectionName, employee.id!));
+    fetchEmployees();
+  }
+  
 };
 onMounted(() => {
   fetchEmployees();
