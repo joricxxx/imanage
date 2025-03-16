@@ -3,17 +3,29 @@
     <h1>IManager</h1>
     <div class="flex items-center gap-4">
       <h1>{{ currentUser }}</h1>
-      <UiButton variant="destructive">Logout</UiButton>
+      <UiButton @click="handleLogout" variant="destructive">Logout</UiButton>
       <UiButton>Toggle Theme</UiButton>
       
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import type { User } from '~/types/user';
+import type { Account } from '~/types/account';
 
-const account = useState<User>('account')
+const router = useRouter()
+const userState = useState('account')
+const userCookie = useCookie('account')
+
+
+const account = useState<Account>('account')
 const currentUser = computed(() => account.value?.username || 'Guest')
+
+const handleLogout = () => {
+  userState.value = null;
+  userCookie.value = null;
+  router.push('/login');
+
+}
 </script>
 
 

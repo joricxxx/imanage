@@ -53,8 +53,12 @@ import { ref, onMounted, watch } from "vue";
 import type { Account } from "~/types/account";
 import type { Employee } from "~/types/employee";
 
-// Define the Employee type
 
+definePageMeta({
+    middleware: ["auth"],
+})
+
+// Define the Employee type
 const firebaseConfig = useRuntimeConfig().public;
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);

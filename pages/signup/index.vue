@@ -23,6 +23,9 @@ import { getFirestore, collection, addDoc, setDoc, doc } from 'firebase/firestor
 import { ref } from 'vue'
 import { useToast } from '~/composables/useToast';
 
+definePageMeta({
+    middleware: 'log'
+})
 // Firebase Setup
 const firebaseConfig = useRuntimeConfig().public;
 const firebaseApp = initializeApp(firebaseConfig)
@@ -58,6 +61,13 @@ const handleSignUp = async () => {
       password: password.value,
       uid: genAlhaNumericId
     }
+    const userCookie = useCookie('account')
+    userCookie.value = JSON.stringify({
+      username: username.value,
+      email: email.value,
+      password: password.value,
+      uid: genAlhaNumericId
+    })
     useToast().toast({
       description: 'Account created successfully!',
       variant: 'success',
