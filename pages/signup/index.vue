@@ -3,10 +3,10 @@
       <div class="min-h-screen flex items-center justify-center">
           <form @submit.prevent="handleSignUp" class="p-8 rounded shadow-md space-y-4 w-full max-w-md">
               <h1 class="text-2xl font-bold text-center">Sign Up</h1>
-              <UiVeeInput v-model="username" label="Username" placeholder="Username" />
-              <UiVeeInput v-model="email" label="Email" placeholder="Email" type="email" />
-              <UiVeeInput v-model="password" label="Password" type="password" />
-              <UiVeeInput v-model="confirmPassword" label="Confirm Password" type="password" />
+              <UiVeeInput v-model="username" label="Username" placeholder="Username" required/>
+              <UiVeeInput v-model="email" label="Email" placeholder="Email" type="email" required />
+              <UiVeeInput v-model="password" label="Password" type="password" required />
+              <UiVeeInput v-model="confirmPassword" label="Confirm Password" type="password" required/>
   
               <UiButton type="submit" class="w-full flex justify-center">Sign Up</UiButton>
               <p class="text-center mt-4">
