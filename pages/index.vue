@@ -9,9 +9,8 @@
         </p>
       </div>
       <div>
-        <UiButton size="sm" @click="isAddingEmployee = true">Add Employee</UiButton>
+        <UiButton size="sm" @click="openAddDialog">Add Employee</UiButton>
         <!-- Add Employee Modal -->
-        <EmployeeModal v-model="isAddingEmployee" :employee="editItem"/>
       </div>
     </div>
     <div class="mt-10 grid overflow-x-auto">
@@ -43,35 +42,34 @@
         </UiTableBody>
       </UiTable>
     </div>
+    <EmployeeModal v-model="dialog" :employee="editItem" @employee-updated="fetchEmployees"/>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, computed } from "vue";
 import type { Account } from "~/types/account";
 import type { Employee } from "~/types/employee";
 
-
 definePageMeta({
     middleware: ["auth"],
-})
+});
 
-// Define the Employee type
 const firebaseConfig = useRuntimeConfig().public;
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-const account = useState<Account>('account')
-const currentUser = computed(() => account.value || null)
-const userID = currentUser.value?.uid || "default"
+const account = useState<Account>('account');
+const currentUser = computed(() => account.value || null);
+const userID = currentUser.value?.uid || "default";
 
-const isAddingEmployee = ref(false);
 const collectionName = `collections/${userID}/employees`;
 const employees = ref<Employee[]>([]);
 const isEmptyCollection = ref();
 
+const dialog = ref(false);
 const editItem = ref<Employee>();
 
 // Fetch employees from Firestore
@@ -87,26 +85,26 @@ const fetchEmployees = async () => {
     console.error("Error fetching employees:", error);
   }
 };
+
 const setEdit = (employee: Employee) => {
   editItem.value = employee;
-  isAddingEmployee.value = true;
+  dialog.value = true;
 };
+
+const openAddDialog = () => {
+  editItem.value = undefined; // reset editItem to show add employee form
+  dialog.value = true;
+};
+
 const remove = async (employee: Employee) => {
   const res = confirm("Are you sure you want to delete this employee?");
   if (res) {
     await deleteDoc(doc(db, collectionName, employee.id!));
     fetchEmployees();
   }
-  
 };
+
 onMounted(() => {
   fetchEmployees();
-});
-
-// Watch for changes in isAddingEmployee and refresh the table when the modal is closed
-watch(isAddingEmployee, (newValue) => {
-  if (!newValue) {
-    fetchEmployees();
-  }
 });
 </script>
