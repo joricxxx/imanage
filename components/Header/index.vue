@@ -5,7 +5,6 @@
       <h1>{{ currentUser }}</h1>
       <LogoutDialogue />
       <UiButton>Toggle Theme</UiButton>
-      
     </div>
   </div>
 </template>
