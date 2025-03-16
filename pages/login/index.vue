@@ -21,6 +21,10 @@ import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+definePageMeta({
+    middleware: 'log'
+})
+
 const firebaseConfig = useRuntimeConfig().public;
 const firebaseApp = initializeApp(firebaseConfig)
 const db = getFirestore(firebaseApp)
@@ -50,7 +54,10 @@ const handleLogin = async () => {
           variant: 'success',
           icon: 'lucide:check-circle'
         });
-        await new Promise(resolve => setTimeout(resolve, 2000)); // This will wait for 2 seconds
+        useState('account').value = doc.data();
+        const userCookie = useCookie('account');
+        userCookie.value = JSON.stringify(doc.data());
+        await new Promise(resolve => setTimeout(resolve, 1000)); // This will wait for 2 seconds
         router.push('/');
         return; // Exit loop after successful login
       } else {
