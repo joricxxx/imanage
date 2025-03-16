@@ -33,9 +33,9 @@
               <UiTableCell class="pl-0 text-muted-foreground">{{ e.title }}</UiTableCell>
               <UiTableCell class="pl-0 text-muted-foreground">{{ e.email }}</UiTableCell>
               <UiTableCell class="pl-0 text-muted-foreground">{{ e.sex }}</UiTableCell>
-              <UiTableCell class="pl-0 text-right space-x-2">
+              <UiTableCell class="pl-0 flex space-x-2 justify-end">
                 <UiButton @click="setEdit(e)" size="sm" variant="secondary">Edit</UiButton>
-                <UiButton @click="remove(e)" size="sm" variant="destructive">Delete</UiButton>
+                <DeleteDialogue :employee="e" @employee-deleted="fetchEmployees" />
               </UiTableCell>
             </UiTableRow>
           </template>
