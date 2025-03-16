@@ -4,10 +4,10 @@
           <UiDialogContent :title="title" :description="description">
               <template #content>
                   <form @submit.prevent="handleSubmit" class="grid gap-5">
-                    <UiVeeInput v-model="form.name" name="Name" label="Name" placeholder="John Doe"/>
-                    <UiVeeInput v-model="form.title" name="Title" label="Title" placeholder="Software Engineer" />
-                    <UiVeeInput v-model="form.email" name="Email" label="Email" placeholder="Email" />
-                    <UiVeeMultiSelect v-model="form.sex" name="Sex" label="Sex" :options="['Male', 'Female']" placeholder="Sex"/>
+                    <UiVeeInput v-model="form.name" name="Name" label="Name" placeholder="John Doe" required/>
+                    <UiVeeInput v-model="form.title" name="Title" label="Title" placeholder="Software Engineer" required/>
+                    <UiVeeInput v-model="form.email" name="Email" label="Email" placeholder="Email" required/>
+                    <UiVeeMultiSelect v-model="form.sex" name="Sex" label="Sex" :options="['Male', 'Female']" placeholder="Sex"required/>
                     <UiButton type="submit" variant="default" class="w-full">
                         {{ buttonText }}
                     </UiButton>
@@ -26,7 +26,6 @@ import type { Account } from "~/types/account";
 import type { Employee } from "~/types/employee";
 
 const props = defineProps<{ employee?: Employee }>();
-
 const isEditing = computed(() => !!props.employee);
 
 // Modal Info
