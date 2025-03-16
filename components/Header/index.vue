@@ -4,7 +4,6 @@
     <div class="flex items-center gap-4">
       <h1>{{ currentUser }}</h1>
       <LogoutDialogue />
-      <UiButton>Toggle Theme</UiButton>
     </div>
   </div>
 </template>
