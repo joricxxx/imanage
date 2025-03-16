@@ -11,6 +11,7 @@
     "ui": "npx ui-thing@latest add"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.6.0",
     "@morev/vue-transitions": "^3.0.5",
     "@nuxt/fonts": "^0.11.0",
     "@nuxt/icon": "^1.11.0",
@@ -19,6 +20,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@vee-validate/nuxt": "^4.15.0",
     "@vee-validate/yup": "^4.15.0",
+    "@vueform/multiselect": "^2.6.11",
     "@vueuse/nuxt": "^13.0.0",
     "firebase": "^11.4.0",
     "nuxt": "^3.16.0",
